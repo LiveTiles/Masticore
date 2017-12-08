@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -135,5 +136,39 @@ namespace Masticore
             resp.Content = new StringContent(text, Encoding.Unicode, "text/plain");
             return resp;
         }
+
+        /// <summary>
+        /// Combine Uri paths like System.IO Path.Combine
+        /// </summary>
+        /// <param name="uri">The base Uri</param>
+        /// <param name="paths">The paths to append in</param>
+        /// <returns>A combined Uri</returns>
+        public static Uri AppendPath(this Uri uri, params string[] paths)
+        {
+           return new Uri(paths.Aggregate(uri.AbsoluteUri, (current, path) => string.Format("{0}/{1}", current.TrimEnd('/'), path.TrimStart('/'))));
+        }
+
+        /// <summary>
+        /// Appends query string parameters
+        /// </summary>
+        /// <param name="uri">The base Uri</param>
+        /// <param name="queries">The query strings</param>
+        /// <returns></returns>
+        public static Uri AppendQuery(this Uri uri, params string[] queries)
+        {
+   
+            return new Uri(uri.AbsoluteUri + "?" + string.Join("&", queries));
+        }
+
+        /// <summary>
+        /// Convert a JSON string into a UTF8 encoded media type 
+        /// </summary>
+        /// <param name="str">The JSON-ready string</param>
+        /// <returns></returns>
+        public static StringContent ToJSONContent(this string str)
+        {
+            return new StringContent(str, Encoding.UTF8, "application/json");
+        }
+
     }
 }
