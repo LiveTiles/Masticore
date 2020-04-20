@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Masticore
 {
@@ -25,7 +21,7 @@ namespace Masticore
         /// <summary>
         /// Gets or sets the connection string for this storage table
         /// </summary>
-        string StorageConnectionString { get; set; }
+        Func<string> GetStorageConnectionString { get; set; }
     }
 
     /// <summary>

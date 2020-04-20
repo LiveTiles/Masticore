@@ -14,7 +14,11 @@ namespace Masticore
         /// ida:ClientId
         /// </summary>
         public static readonly string ClientId = ConfigurationManager.AppSettings["ida:ClientId"];
-
+        /// <summary>
+        /// Gets the Client Secret, the unique app key
+        /// ida:ClientSecret
+        /// </summary>
+        public static readonly string ClientSecret = ConfigurationManager.AppSettings["ida:ClientSecret"];
         /// <summary>
         /// Gets the Domain for AD, the URL for the STS server that is shared for all apps (generally microsoft URL)
         /// ida:AADInstance
@@ -32,6 +36,13 @@ namespace Masticore
         /// ida:TenantId
         /// </summary>
         public static readonly string TenantId = ConfigurationManager.AppSettings["ida:TenantId"];
+
+        /// <summary>
+        /// Gets the name for the AD tenant, which is the domain prefix.
+        /// ida:TenantName
+        /// </summary>
+        public static readonly string TenantName = ConfigurationManager.AppSettings["ida:TenantName"];
+
 
         /// <summary>
         /// Gets the target URL (generally pointing back to this app) for after the user logs out of the system
@@ -76,7 +87,7 @@ namespace Masticore
             {
                 if (!_IsOrgAuthentication.HasValue)
                 {
-                    bool isOrg = true;
+                    var isOrg = true;
                     bool.TryParse(ConfigurationManager.AppSettings["ida:ActiveDirectoryIsOrg"], out isOrg);
                     _IsOrgAuthentication = isOrg;
                 }

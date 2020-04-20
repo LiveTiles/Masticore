@@ -40,7 +40,7 @@ namespace Masticore
                     return true;
 
                 // Otherwise, extract the value and continue
-                string val = value.ToString();
+                var val = value.ToString();
 
                 // If we don't have a format, then just natural parse
                 if (string.IsNullOrEmpty(Format))
@@ -50,7 +50,7 @@ namespace Masticore
                 else
                 {
                     // If we do have a format, then parse using that
-                    CultureInfo provider = CultureInfo.InvariantCulture;
+                    var provider = CultureInfo.InvariantCulture;
                     DateTime.ParseExact(val, Format, provider);
                 }
 

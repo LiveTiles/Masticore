@@ -53,7 +53,7 @@ namespace Masticore
         [DataType(DataType.DateTime)]
         [Editable(false)]
         [DataMember]
-        public DateTime? DeletedUtc { get; set; }
+        public virtual DateTime? DeletedUtc { get; set; }
     }
 
     /// <summary>
@@ -74,5 +74,20 @@ namespace Masticore
         [Merge(AllowUpdate = false)]
         [Display(Name = "Universal ID")]
         public string UniversalId { get; set; }
+    }
+
+    /// <summary>
+    /// Base class for an object that is persistent, concurrent, and universal
+    /// </summary>
+    ///  <typeparam name="KeyType">The <see cref="Type"/> of key for the model (e.g., int)</typeparam>
+    [DataContract]
+    public abstract class PersistentConcurrentUniversalBase<KeyType> : PersistentUniversalBase<KeyType>, IConcurrent
+    {
+        /// <summary>
+        /// This will be an automatically tracked, generated field for optimistic concurrency. Will trigger <see cref="DbUpdateConcurrencyException"/> if changed.
+        /// </summary>
+        [Timestamp]
+        [DataMember]
+        public byte[] ConcurrencyToken { get; set; }
     }
 }

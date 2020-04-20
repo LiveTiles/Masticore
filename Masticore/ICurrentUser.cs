@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Masticore
+﻿namespace Masticore
 {
     /// <summary>
     /// Interface for a user's basic information
@@ -24,6 +18,13 @@ namespace Masticore
     {
         bool IsAuthenticated { get; }
     }
+
+    public interface ICurrentUserWithImage : ICurrentUser
+    {
+        int Id { get; }
+        string ImageUrl { get; }
+    }
+
 
     /// <summary>
     /// Extensions methods for the ICurrentUser interface

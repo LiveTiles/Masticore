@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Masticore
 {
@@ -94,7 +95,7 @@ namespace Masticore
         public static string ToDefaultString(this Stream stream)
         {
             stream.Position = 0;
-            using (StreamReader reader = new StreamReader(stream, Encoding.Default))
+            using (var reader = new StreamReader(stream, Encoding.Default))
             {
                 return reader.ReadToEnd();
             }
@@ -108,9 +109,23 @@ namespace Masticore
         public static string ToUnicodeString(this Stream stream)
         {
             stream.Position = 0;
-            using (StreamReader reader = new StreamReader(stream, Encoding.Unicode))
+            using (var reader = new StreamReader(stream, Encoding.Unicode))
             {
                 return reader.ReadToEnd();
+            }
+        }
+
+        /// <summary>
+        /// converts a stream to a unicode string
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public static Task<string> ToUnicodeStringAsync(this Stream stream)
+        {
+            stream.Position = 0;
+            using (var reader = new StreamReader(stream, Encoding.Unicode))
+            {
+                return reader.ReadToEndAsync();
             }
         }
 
@@ -121,7 +136,7 @@ namespace Masticore
         /// <returns></returns>
         public static MemoryStream ToStream(this string src)
         {
-            byte[] byteArray = Encoding.Unicode.GetBytes(src);
+            var byteArray = Encoding.Unicode.GetBytes(src);
             return new MemoryStream(byteArray);
         }
 

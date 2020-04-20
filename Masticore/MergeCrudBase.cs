@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Masticore
@@ -10,7 +11,8 @@ namespace Masticore
     /// </summary>
     /// <typeparam name="ModelType">Any type with an Id field</typeparam>
     /// <typeparam name="KeyType"></typeparam>
-    public abstract class MergeCrudBase<ModelType, KeyType> : ICrud<ModelType, KeyType>
+    public abstract class MergeCrudBase<ModelType, KeyType>
+        : ICrud<ModelType, KeyType>
         where ModelType : class, IIdentifiable<KeyType>, new()
     {
         /// <summary>
@@ -21,9 +23,25 @@ namespace Masticore
         /// <returns></returns>
         public virtual Task<ModelType> CreateAsync(ModelType model)
         {
-            ModelType newModel = Create(model);
+            var newModel = Create(model);
 
             return Task.FromResult(newModel);
+        }
+
+        /// <summary>
+        /// Creates an IEnumerable of new instances. 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public virtual Task<IEnumerable<ModelType>> CreateAsync(IEnumerable<ModelType> models)
+        {
+
+            var createdModels = models
+                                .Where(m => m != null)
+                                .Select(m => Create(m));
+
+            return Task.FromResult(createdModels);
+
         }
 
         /// <summary>
@@ -53,14 +71,14 @@ namespace Masticore
             // Optionally apply created info
             if (newModel is IAuditable)
             {
-                IAuditable auditable = newModel as IAuditable;
+                var auditable = newModel as IAuditable;
                 auditable.SetCreatedUtc();
             }
 
             // Optionally generate external ID
             if (newModel is IUniversal)
             {
-                IUniversal universal = newModel as IUniversal;
+                var universal = newModel as IUniversal;
                 if (string.IsNullOrEmpty(universal.UniversalId))
                     universal.GenerateUniversalId();
             }
@@ -68,7 +86,7 @@ namespace Masticore
             // Optionally ensure not soft deleted
             if (newModel is ISoftDeletable)
             {
-                ISoftDeletable deletable = newModel as ISoftDeletable;
+                var deletable = newModel as ISoftDeletable;
                 deletable.SoftRestore();
             }
         }
@@ -79,6 +97,14 @@ namespace Masticore
         /// <param name="id"></param>
         /// <returns></returns>
         public abstract Task DeleteAsync(KeyType id);
+
+
+        /// <summary>
+        /// Deletes the objects with the given keys - bring your own implementation
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public abstract Task DeleteAsync(IEnumerable<KeyType> id);
 
         /// <summary>
         /// Reads all objects in this CRUD
@@ -104,7 +130,7 @@ namespace Masticore
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
 
-            ModelType existingModel = await this.ReadAsync(model.Id);
+            var existingModel = await this.ReadAsync(model.Id);
 
             Update(existingModel, model);
 
@@ -122,7 +148,7 @@ namespace Masticore
 
             if (existingModel is IAuditable)
             {
-                IAuditable auditable = existingModel as IAuditable;
+                var auditable = existingModel as IAuditable;
                 auditable.SetModifiedUtc();
             }
         }

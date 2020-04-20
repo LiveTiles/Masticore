@@ -2,6 +2,7 @@
 
 namespace Masticore
 {
+    /// <inheritdoc />
     /// <summary>
     /// Reads the current user settings from the config file - this is a stand-in class for local development
     /// </summary>
@@ -15,56 +16,26 @@ namespace Masticore
         /// <summary>
         /// Returns true - always
         /// </summary>
-        public bool IsAuthenticated
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public bool IsAuthenticated => true;
 
         /// <summary>
         /// Gets the E-mail specified on the config file
         /// </summary>
-        public string Email
-        {
-            get
-            {
-                return DefaultEmail;
-            }
-        }
+        public string Email => DefaultEmail;
 
         /// <summary>
         /// Gets the identifier specified in the config file
         /// </summary>
-        public string ExternalId
-        {
-            get
-            {
-                return DefaultIdentifier;
-            }
-        }
+        public string ExternalId => DefaultIdentifier;
 
         /// <summary>
         /// Gets the first name specified in the config file
         /// </summary>
-        public string FirstName
-        {
-            get
-            {
-                return DefaultFirstName;
-            }
-        }
+        public string FirstName => DefaultFirstName;
 
         /// <summary>
         /// Gets the last name specified in the config file
         /// </summary>
-        public string LastName
-        {
-            get
-            {
-                return DefaultLastName;
-            }
-        }
+        public string LastName => DefaultLastName;
     }
 }

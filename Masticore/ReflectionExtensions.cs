@@ -20,10 +20,10 @@ namespace Masticore
         /// <returns></returns>
         public static MemberInfo GetPropertyInformation(Expression propertyExpression)
         {
-            MemberExpression memberExpr = propertyExpression as MemberExpression;
+            var memberExpr = propertyExpression as MemberExpression;
             if (memberExpr == null)
             {
-                UnaryExpression unaryExpr = propertyExpression as UnaryExpression;
+                var unaryExpr = propertyExpression as UnaryExpression;
                 if (unaryExpr != null && unaryExpr.NodeType == ExpressionType.Convert)
                 {
                     memberExpr = unaryExpr.Operand as MemberExpression;
@@ -47,14 +47,14 @@ namespace Masticore
         public static string GetDisplayName(this MemberInfo memberInfo)
         {
             // Check for the DisplayName attribute
-            DisplayNameAttribute displayNameAttribute = memberInfo.GetCustomAttribute<DisplayNameAttribute>();
+            var displayNameAttribute = memberInfo.GetCustomAttribute<DisplayNameAttribute>();
             if (displayNameAttribute != null)
             {
                 return displayNameAttribute.DisplayName;
             }
 
             // Check for the Display attribute
-            DisplayAttribute displayAttribute = memberInfo.GetCustomAttribute<DisplayAttribute>();
+            var displayAttribute = memberInfo.GetCustomAttribute<DisplayAttribute>();
             if (displayAttribute != null)
             {
                 return displayAttribute.Name;
@@ -72,7 +72,7 @@ namespace Masticore
         /// <returns></returns>
         public static string GetDisplayName<T>(Expression<Func<T, object>> propertyExpression)
         {
-            MemberInfo memberInfo = GetPropertyInformation(propertyExpression.Body);
+            var memberInfo = GetPropertyInformation(propertyExpression.Body);
             if (memberInfo == null)
             {
                 throw new ArgumentException(
@@ -94,11 +94,11 @@ namespace Masticore
             if (!type.IsEnum)
                 return value.ToString();
 
-            MemberInfo[] members = type.GetMember(value.ToString());
+            var members = type.GetMember(value.ToString());
             if (members.Length == 0)
                 return value.ToString();
 
-            MemberInfo memberInfo = members[0];
+            var memberInfo = members[0];
             return GetDisplayName(memberInfo);
         }
 
@@ -111,16 +111,16 @@ namespace Masticore
         public static void CopyProperties(this object objSource, object objDestination)
         {
             //get the list of all properties in the destination object
-            PropertyInfo[] destProps = objDestination.GetType().GetProperties();
-            PropertyInfo[] sourceProps = objSource.GetType().GetProperties();
-            Dictionary<string, PropertyInfo> destPropsDict = destProps.ToDictionary(sp => sp.Name);
+            var destProps = objDestination.GetType().GetProperties();
+            var sourceProps = objSource.GetType().GetProperties();
+            var destPropsDict = destProps.ToDictionary(sp => sp.Name);
 
             //get the list of all properties in the source object
-            foreach (PropertyInfo sourceProp in sourceProps)
+            foreach (var sourceProp in sourceProps)
             {
                 if (destPropsDict.ContainsKey(sourceProp.Name))
                 {
-                    PropertyInfo destProp = destPropsDict[sourceProp.Name];
+                    var destProp = destPropsDict[sourceProp.Name];
                     if (destProp.PropertyType.IsAssignableFrom(sourceProp.PropertyType))
                     {
                         destProp.SetValue(objDestination, sourceProp.GetValue(objSource));
@@ -136,7 +136,7 @@ namespace Masticore
         /// <returns></returns>
         public static string GetModelTypeName(this Object model)
         {
-            Type type = model.GetType();
+            var type = model.GetType();
 
             // If the type is a dynamic proxy of a type (EG, pulled from a DbContext), then take the name of the base class
             if (type.Namespace == "System.Data.Entity.DynamicProxies")

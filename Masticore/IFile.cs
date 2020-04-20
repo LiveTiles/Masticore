@@ -46,6 +46,11 @@ namespace Masticore
         /// <returns></returns>
         string GetFileUrl(FileType cloudFile);
 
+
+        Task<string> GetFileUrlWithToken(FileType cloudFile);
+
+        string GetFileUrlWithToken(string fileUrl);
+
         /// <summary>
         /// Deletes the given file from storage
         /// NOTE: This should NOT change the cloudFile properties at all
@@ -70,5 +75,11 @@ namespace Masticore
         /// <param name="fileStream"></param>
         /// <returns></returns>
         Task UploadAsync(FileType cloudFile, Stream fileStream);
+
+        Task UploadAsync(FileType cloudFile, string fileContent);
+
+        Task UploadAsync(FileType cloudFile, Stream fileStream, bool isSnapshot = false);
+
+        Task UploadAsync(FileType cloudFile, string fileContent, bool isSnapshot = false);
     }
 }

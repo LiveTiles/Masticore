@@ -29,10 +29,10 @@ namespace Masticore
         /// <returns></returns>
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            object instance = validationContext.ObjectInstance;
-            Type type = validationContext.ObjectType;
-            PropertyInfo prop = type.GetProperty(IgnoreFlagName);
-            bool flag = (bool)prop.GetValue(instance);
+            var instance = validationContext.ObjectInstance;
+            var type = validationContext.ObjectType;
+            var prop = type.GetProperty(IgnoreFlagName);
+            var flag = (bool)prop.GetValue(instance);
 
             if (flag == IgnoreFlagValue)
                 return null;

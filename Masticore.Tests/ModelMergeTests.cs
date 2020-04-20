@@ -1,8 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Masticore;
-
 namespace Masticore.Tests
 {
     /// <summary>
@@ -136,12 +134,12 @@ namespace Masticore.Tests
         public void TestModelMergeOnce()
         {
             // Arrange
-            string firstValue = "Hello";
-            string secondValue = "World";
+            var firstValue = "Hello";
+            var secondValue = "World";
 
-            OnceModel model = new OnceModel { String = null };
-            OnceModel newValues1 = new OnceModel { String = firstValue };
-            OnceModel newValues2 = new OnceModel { String = secondValue };
+            var model = new OnceModel { String = null };
+            var newValues1 = new OnceModel { String = firstValue };
+            var newValues2 = new OnceModel { String = secondValue };
 
             // Act
             ModelMerge.MergeProperties(model, newValues1, MergeMode.Update);
@@ -158,8 +156,8 @@ namespace Masticore.Tests
         public void TestTestModelToOnce()
         {
             // Arrange
-            TestModel testModel = CreateLoadedTestModel();
-            OnceModel onceModel = new OnceModel { String = "Came From Behind" };
+            var testModel = CreateLoadedTestModel();
+            var onceModel = new OnceModel { String = "Came From Behind" };
 
             // Act
             ModelMerge.MergeProperties(testModel, onceModel, MergeMode.All);

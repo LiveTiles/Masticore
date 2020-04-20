@@ -1,10 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Masticore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Masticore.Tests
 {
@@ -20,10 +14,10 @@ namespace Masticore.Tests
         [TestMethod()]
         public void EncryptTest()
         {
-            string plainText = "Hello World";
-            string passPhrase = "Key";
+            var plainText = "Hello World";
+            var passPhrase = "Key";
 
-            string encryptedText = StringEncryption.Encrypt(plainText, passPhrase);
+            var encryptedText = StringEncryption.Encrypt(plainText, passPhrase);
 
             Assert.IsNotNull(encryptedText);
         }
@@ -34,12 +28,12 @@ namespace Masticore.Tests
         [TestMethod()]
         public void DecryptTest()
         {
-            string plainText = "Hello World";
-            string passPhrase = "Key";
+            var plainText = "Hello World";
+            var passPhrase = "Key";
 
-            string encryptedText = StringEncryption.Encrypt(plainText, passPhrase);
+            var encryptedText = StringEncryption.Encrypt(plainText, passPhrase);
 
-            string decryptedText = StringEncryption.Decrypt(encryptedText, passPhrase);
+            var decryptedText = StringEncryption.Decrypt(encryptedText, passPhrase);
 
             Assert.IsTrue(plainText == decryptedText);
         }

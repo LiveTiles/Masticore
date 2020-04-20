@@ -8,7 +8,7 @@ namespace Masticore
     /// <summary>
     /// Attribute for declaring a property on a model as merged with the ModelMerge system
     /// </summary>
-    [AttributeUsage(System.AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property)]
     public class MergeAttribute : Attribute
     {
         /// <summary>
@@ -18,9 +18,9 @@ namespace Masticore
         public MergeAttribute(object deltaType = null)
         {
             DeltaType = deltaType;
-            this.AllowUpdate = true;
-            this.AllowCreate = true;
-            this.AllowOnce = false;
+            AllowUpdate = true;
+            AllowCreate = true;
+            AllowOnce = false;
         }
 
         /// <summary>
@@ -28,10 +28,10 @@ namespace Masticore
         /// </summary>
         public MergeAttribute()
         {
-            this.DeltaType = null;
-            this.AllowUpdate = true;
-            this.AllowCreate = true;
-            this.AllowOnce = false;
+            DeltaType = null;
+            AllowUpdate = true;
+            AllowCreate = true;
+            AllowOnce = false;
         }
 
         /// <summary>
@@ -104,11 +104,11 @@ namespace Masticore
         /// <param name="type"></param>
         public ModelDelta(string objectTypeName, string propertyName, string oldValue, string newValue, object type)
         {
-            this.ObjectTypeName = objectTypeName;
-            this.PropertyName = propertyName;
-            this.OldValue = oldValue;
-            this.NewValue = newValue;
-            this.DeltaType = type;
+            ObjectTypeName = objectTypeName;
+            PropertyName = propertyName;
+            OldValue = oldValue;
+            NewValue = newValue;
+            DeltaType = type;
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Masticore
         {
             get
             {
-                return string.Format("{0} field '{1}' was changed from '{2}' to '{3}'", this.ObjectTypeName, this.PropertyName, this.OldValue, this.NewValue);
+                return string.Format("{0} field '{1}' was changed from '{2}' to '{3}'", ObjectTypeName, PropertyName, OldValue, NewValue);
             }
         }
     }
@@ -165,12 +165,12 @@ namespace Masticore
             if (newValuesModel == null)
                 throw new ArgumentNullException(nameof(newValuesModel));
 
-            List<ModelDelta> deltas = new List<ModelDelta>();
+            var deltas = new List<ModelDelta>();
 
-            Type targetModelType = targetModel.GetType();
-            Type newValuesModelType = newValuesModel.GetType();
-            PropertyInfo[] targetModelProperties = targetModelType.GetProperties();
-            Dictionary<string, PropertyInfo> newValuesModelProperties = newValuesModelType.GetProperties().ToDictionary(p => p.Name);
+            var targetModelType = targetModel.GetType();
+            var newValuesModelType = newValuesModel.GetType();
+            var targetModelProperties = targetModelType.GetProperties();
+            var newValuesModelProperties = newValuesModelType.GetProperties().ToDictionary(p => p.Name);
 
             // Iterate through the properties in the type
             foreach (var targetModelProperty in targetModelProperties)
@@ -180,9 +180,9 @@ namespace Masticore
                     continue;
 
                 // Find if they have an editable or historical attribute on them
-                MergeAttribute isModelMergedAttr = targetModelProperty.GetCustomAttribute<MergeAttribute>();
+                var isModelMergedAttr = targetModelProperty.GetCustomAttribute<MergeAttribute>();
 
-                bool isAllowed = IsMergeAllowed(mode, isModelMergedAttr);
+                var isAllowed = IsMergeAllowed(mode, isModelMergedAttr);
 
                 if (isAllowed)
                 {
@@ -193,7 +193,7 @@ namespace Masticore
                         deltaType = isModelMergedAttr.DeltaType;
 
                     // Pull out the newValues property so we can pass it along
-                    PropertyInfo newValuesProperty = newValuesModelProperties[targetModelProperty.Name];
+                    var newValuesProperty = newValuesModelProperties[targetModelProperty.Name];
 
                     SetNewValueOnModel(targetModel, newValuesModel, deltas, targetModelProperty, newValuesProperty, deltaType, isModelMergedAttr.AllowOnce);
                 }
@@ -244,8 +244,8 @@ namespace Masticore
             PropertyInfo targetModelProperty, PropertyInfo newValueProperty,
             object deltaType, bool writeOnce)
         {
-            object newValue = newValueProperty.GetValue(newValuesModel);
-            object oldValue = targetModelProperty.GetValue(targetModel);
+            var newValue = newValueProperty.GetValue(newValuesModel);
+            var oldValue = targetModelProperty.GetValue(targetModel);
 
             // If it's staying null, then skip
             if (newValue == null && oldValue == null)
@@ -259,14 +259,14 @@ namespace Masticore
             if ((newValue == null && oldValue != null) || (newValue != null && oldValue == null) || !newValue.Equals(oldValue))
             {
                 // Save that change into the delta list
-                string propertyDisplayName = targetModelProperty.GetDisplayName();
-                string oldValueString = oldValue != null ? oldValue.ToString() : null;
-                string newValueString = newValue != null ? newValue.ToString() : null;
+                var propertyDisplayName = targetModelProperty.GetDisplayName();
+                var oldValueString = oldValue != null ? oldValue.ToString() : null;
+                var newValueString = newValue != null ? newValue.ToString() : null;
 
-                string objectTypeName = targetModel.GetModelTypeName();
+                var objectTypeName = targetModel.GetModelTypeName();
 
                 // Add this delta to the return list
-                ModelDelta delta = new ModelDelta(objectTypeName, propertyDisplayName, oldValueString, newValueString, deltaType);
+                var delta = new ModelDelta(objectTypeName, propertyDisplayName, oldValueString, newValueString, deltaType);
                 deltas.Add(delta);
 
                 // Set the value in the target object to the value in the source 

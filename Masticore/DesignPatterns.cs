@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 
 namespace Masticore
 {
-    #region Model Interfaces
-
     /// <summary>
     /// An interface for objects that have a unique ID field
     /// </summary>
@@ -97,14 +95,10 @@ namespace Masticore
         /// <returns></returns>
         public static string CreateDescriptionForModel(this INamed model, string changeDescription)
         {
-            string modelTypeName = model.GetModelTypeName();
+            var modelTypeName = model.GetModelTypeName();
             return string.Format("{0} '{1}' {2}", modelTypeName, model.Name, changeDescription);
         }
     }
-
-    #endregion
-
-    #region Builder Pattern
 
     // Creating a new object by creating a single instance of a builder, setting properties on it
     // Then using it to "build" a new instance of another object
@@ -135,6 +129,14 @@ namespace Masticore
         /// <returns></returns>
         Task<Type> BuildAsync();
     }
-
-    #endregion
+    /// <summary>
+    /// Generic interface for an model that has optimistic concurrency. 
+    /// </summary>
+    public interface IConcurrent
+    {
+        /// <summary>
+        /// The database generated concurrency token
+        /// </summary>
+        byte[] ConcurrencyToken { get; set; }
+    }
 }

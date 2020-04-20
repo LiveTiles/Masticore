@@ -7,8 +7,6 @@ namespace Masticore
     /// </summary>
     public static class KeyGenerator
     {
-        #region Static Methods
-
         static Object _TicksLock = new Object();
         static long _LastTicks = long.MinValue;
 
@@ -24,7 +22,7 @@ namespace Masticore
             lock (_TicksLock)
             {
                 // Read current ticks
-                long ticks = DateTime.UtcNow.Ticks;
+                var ticks = DateTime.UtcNow.Ticks;
 
                 // Ensure this ticks is greater than the currenly save value
                 // Otherwise, we increment our current value and return it instead
@@ -63,7 +61,7 @@ namespace Masticore
         /// <returns></returns>
         public static string NextTicksDescendingRowKey(string ticksDescendingRowKey)
         {
-            long val = long.Parse(ticksDescendingRowKey);
+            var val = long.Parse(ticksDescendingRowKey);
             val -= 1;
             return LongToString(val);
         }
@@ -75,7 +73,7 @@ namespace Masticore
         /// <returns></returns>
         public static string NextTicksAscendingRowKey(string ticksDescendingRowKey)
         {
-            long val = long.Parse(ticksDescendingRowKey);
+            var val = long.Parse(ticksDescendingRowKey);
             val += 1;
             return LongToString(val);
         }
@@ -97,7 +95,5 @@ namespace Masticore
         {
             return LongToString(NextUtcTicks());
         }
-
-        #endregion
     }
 }

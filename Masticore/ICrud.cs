@@ -62,6 +62,20 @@ namespace Masticore
     }
 
     /// <summary>
+    /// Interface for an object that enables asynchronous reading of a range of models of a type
+    /// Generally, this is based on context set by properties on the object
+    /// </summary>
+    /// <typeparam name="ModelType"></typeparam>
+    public interface IReadRange<ModelType>
+    {
+        /// <summary>
+        /// Asynchronously returns all models of the given type for this async object
+        /// </summary>
+        /// <returns></returns>
+        Task<RangeResult<ModelType>> ReadRangeAsync(int startAt, int endAt, string filterBy = null);
+    }
+
+    /// <summary>
     /// Interface for an object that enables asynchronous update of a new model based on a template model
     /// </summary>
     /// <typeparam name="ModelType"></typeparam>
@@ -74,7 +88,6 @@ namespace Masticore
         /// <returns>The updated instance of the model (which is likely read fresh from the data source before update occurs)</returns>
         Task<ModelType> UpdateAsync(ModelType model);
     }
-
     /// <summary>
     /// Inteface defining asynchronous CRUD operations on a collection of ModelType using the key KeyType
     /// </summary>
